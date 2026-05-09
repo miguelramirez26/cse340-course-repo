@@ -1,0 +1,25 @@
+{
+  "name": "cse340-course-repo",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "CSE 340 Course Project",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miguelramirez26/cse340-course-repo.git"
+  },
+  "author": "Miguel Ramirez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/miguelramirez26/cse340-course-repo/issues"
+  },
+  "homepage": "https://github.com/miguelramirez26/cse340-course-repo#readme",
+  "dependencies": {
+    "ejs": "^5.0.2",
+    "express": "^5.2.1"
+  }
+}
