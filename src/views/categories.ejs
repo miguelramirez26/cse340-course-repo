@@ -3,10 +3,15 @@
 <main>
     <h1><%= title %></h1>
     <ul>
-        <li>Environmental</li>
-        <li>Educational</li>
-        <li>Community Service</li>
-        <li>Health and Wellness</li>
+        <% if (categories && categories.length > 0) { %>
+            <% categories.forEach(category => { %>
+                <li>
+                    <%= category.name %>
+                </li>
+            <% }) %>
+        <% } else { %>
+            <p>No categories found.</p>
+        <% } %>
     </ul>
 </main>
 

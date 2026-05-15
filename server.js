@@ -5,6 +5,7 @@ import { title } from 'process';
 import { testConnection } from './src/models/db.js';
 import { getAllOrganizations } from './src/models/organizations.js';
 import { getAllProjects } from './src/models/projects.js';
+import { getAllCategories } from './src/models/categories.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -47,7 +48,16 @@ app.get('/projects', async (req, res) => {
 });
 
 app.get('/categories', async (req, res) => {
-    res.render('categories', { title: 'Service Project Categories'});
+    try {
+        const categories = await getAllCategories();
+        res.render('categories', { 
+            title: 'Service Project Categories', 
+            categories: categories 
+        });
+    } catch (error) {
+        console.error("Error loading categories page:", error);
+        res.status(500).send("Internal Server Error");
+    }
 });
 
 app.listen(PORT, async () => {
