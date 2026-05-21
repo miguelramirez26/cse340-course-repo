@@ -2,7 +2,7 @@
 <main>
     <h1><%= title %></h1>
     <p>Explore our current service initiatives:</p>
-    
+
     <ul>
         <% projects.forEach(project => { %>
             <li>
@@ -10,7 +10,15 @@
                     const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
                     const formattedDate = new Date(project.date).toLocaleDateString('en-US', dateOptions);
                 %>
-                <strong><%= formattedDate %>: <%= project.title %> (<%= project.organization_name %>)</strong>
+                <strong>
+                    <%= formattedDate %>: 
+                    <!-- Link to the project details page -->
+                    <a href="/project/<%= project.project_id %>"><%= project.title %></a> 
+                    (
+                    <!-- Link to the organization details page -->
+                    <a href="/organization/<%= project.organization_id %>"><%= project.organization_name %></a>
+                    )
+                </strong>
                 <p><%= project.description %></p>
                 <p>Location: <%= project.location %></p>
             </li>
