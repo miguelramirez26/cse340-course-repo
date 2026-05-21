@@ -1,0 +1,24 @@
+<%- include('partials/header') %>
+<main>
+    <h1><%= title %></h1>
+
+    <% if (organizationDetails) { %>
+        <h2><%= organizationDetails.name %></h2>
+        <img src="/images/<%= organizationDetails.logo_filename %>" alt="<%= organizationDetails.name %> logo">
+        <p>Description: <%= organizationDetails.description %></p>
+    <% } %>
+
+    <h3>Service Projects</h3>
+    <ul>
+        <% if (projects && projects.length > 0) { %>
+            <% projects.forEach(project => { %>
+                <li>
+                    <a href="/project/<%= project.project_id %>"><%= project.title %></a>
+                </li>
+            <% }) %>
+        <% } else { %>
+            <li>No projects found for this organization.</li>
+        <% } %>
+    </ul>
+</main>
+<%- include('partials/footer') %>
