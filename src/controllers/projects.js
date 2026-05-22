@@ -1,5 +1,6 @@
 // Import any needed model functions
 import { getUpcomingProjects, getProjectDetails } from '../models/projects.js';
+import { getCategoriesByProject } from '../models/categories.js';
 
 // Constant for the number of upcoming projects to display
 const NUMBER_OF_UPCOMING_PROJECTS = 5;
@@ -33,9 +34,13 @@ const showProjectDetailsPage = async (req, res) => {
             return res.status(404).render('errors/404', { title: 'Project Not Found' });
         }
 
+        // Call the model function to get categories for this project
+        const categories = await getCategoriesByProject(projectId);
+
         const title = project.title;
+        
         // Render the service project details page view (project.ejs)
-        res.render('project', { title, project });
+        res.render('project', { title, project, categories });
     } catch (error) {
         console.error("Error in showProjectDetailsPage controller:", error);
         res.status(500).render('errors/500', { title: 'Server Error' });

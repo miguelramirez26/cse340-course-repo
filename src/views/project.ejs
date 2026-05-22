@@ -20,6 +20,20 @@
             </a>
         </p>
     </div>
+    <div class="project-categories">
+        <h3>Categories:</h3>
+        <% if (categories && categories.length > 0) { %>
+            <div class="tags-container">
+                <% categories.forEach(category => { %>
+                    <a href="/category/<%= category.category_id %>" class="category-tag">
+                        <%= category.name %>
+                    </a>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <p>No categories assigned to this project.</p>
+        <% } %>
+    </div>
 </main>
 
 <%- include('partials/footer') %>

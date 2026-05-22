@@ -62,10 +62,28 @@ const getProjectDetails = async (id) => {
     return result.rows.length > 0 ? result.rows[0] : null; 
 };
 
+// Retrieve all service projects for a given category
+const getProjectsByCategory = async (categoryId) => {
+  try {
+    const query = `
+      SELECT p.* 
+      FROM public.project p
+      JOIN public.project_category pc ON p.project_id = pc.project_id
+      WHERE pc.category_id = $1;
+    `;
+    const result = await db.query(query, [categoryId]);
+    return result.rows;
+  } catch (error) {
+    console.error("Error fetching projects by category:", error);
+    throw error;
+  }
+};
+
 // Export all functions
 export { 
     getAllProjects, 
     getProjectsByOrganizationId, 
     getUpcomingProjects, 
-    getProjectDetails 
+    getProjectDetails,
+    getProjectsByCategory
 };
