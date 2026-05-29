@@ -1,7 +1,7 @@
 // Import any needed model functions
 import { body, validationResult } from 'express-validator';
 import { getAllCategories, getCategoryById, getCategoriesByProject, updateCategoryAssignments, addCategory, updateCategory } from '../models/categories.js';
-import { getProjectDetails } from '../models/projects.js';
+import { getProjectDetails, getProjectsByCategory } from '../models/projects.js';
 
 const categoryValidation = [
   body('category_name')
@@ -23,8 +23,8 @@ const showCategoriesPage = async (req, res) => {
 // Create a new controller function for the category details page
 const getCategoryDetails = async (req, res) => {
   try {
-    const categoryId = req.params.id; 
-    
+    const categoryId = req.params.id;
+
     const categoryRows = await getCategoryById(categoryId);
     const projectRows = await getProjectsByCategory(categoryId);
 
@@ -36,13 +36,17 @@ const getCategoryDetails = async (req, res) => {
 
     res.render('categories-details', {
       title: category.name,
-      category: category,
+      categoryDetails: category,
       projects: projectRows
     });
 
   } catch (error) {
     console.error("Error fetching category details:", error);
-    res.status(500).render('errors/500', { title: 'Server Error' });
+    res.status(500).render('errors/500', { 
+      title: 'Server Error',
+      error: error,
+      stack: error.stack
+    });
   }
 };
 
@@ -99,11 +103,11 @@ const processCreateCategory = async (req, res) => {
 const showEditCategoryForm = async (req, res) => {
   const categoryId = req.params.id;
   const categoryRows = await getCategoryById(categoryId);
-  const category = categoryRows;
+  const category = categoryRows[0];
 
   res.render('edit-category', {
     title: 'Edit Category',
-    category: category
+    categoryDetails: category
   });
 };
 

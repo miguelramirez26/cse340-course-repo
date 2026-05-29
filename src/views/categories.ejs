@@ -2,11 +2,16 @@
 
 <main>
     <h1><%= title %></h1>
+    
+    <div class="action-links">
+        <a href="/new-category">Add a New Category</a>
+    </div>
+
     <ul>
         <% if (categories && categories.length > 0) { %>
             <% categories.forEach(category => { %>
                 <li>
-                    <a href="/category/<%= category.category_id %>"><%= category.name %></a>
+                    <a href="/category/<%= category.category_id %>"><%- category.name %></a>
                 </li>
             <% }) %>
         <% } else { %>

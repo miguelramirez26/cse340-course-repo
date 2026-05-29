@@ -1,19 +1,23 @@
 <%- include('./partials/header') %>
 
 <main class="category-details">
-    <h1><%= category.name %> Projects</h1>
+  <h1><%- categoryDetails.name %> Projects</h1>
 
-    <% if (projects && projects.length > 0) { %>
-        <ul>
-            <% projects.forEach(project => { %>
-                <li>
-                    <a href="/project/<%= project.project_id %>"><%= project.title %></a>
-                </li>
-            <% }) %>
-        </ul>
-    <% } else { %>
-        <p>No projects found for this category.</p>
-    <% } %>
+  <div class="action-links">
+    <a href="/edit-category/<%= categoryDetails.category_id %>">Edit Category Name</a>
+  </div>
+
+  <% if (projects && projects.length > 0) { %>
+    <ul>
+      <% projects.forEach(project => { %>
+        <li>
+          <a href="/project/<%= project.project_id %>"><%= project.title %></a>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>No projects found for this category.</p>
+  <% } %>
 </main>
 
 <%- include('./partials/footer') %>

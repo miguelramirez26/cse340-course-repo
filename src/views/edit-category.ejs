@@ -2,7 +2,7 @@
 <main>
   <h1><%= title %></h1>
 
-  <form action="/edit-category/<%= category_id %>" method="POST">
+  <form action="/edit-category/<%= categoryDetails.category_id %>" method="POST">
     <div class="form-group">
       <label for="category_name">Category Name</label>
       <input 
@@ -11,11 +11,11 @@
         name="category_name" 
         maxlength="100" 
         required 
-        value="<%= locals.category_name ? category_name : '' %>"
+        value="<%- categoryDetails.name %>"
       />
     </div>
 
-    <input type="hidden" name="category_id" value="<%= category_id %>" />
+    <input type="hidden" name="category_id" value="<%= categoryDetails.category_id %>" />
 
     <button type="submit">Update Category</button>
   </form>
