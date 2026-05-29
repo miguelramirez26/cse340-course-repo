@@ -63,9 +63,33 @@ const updateCategoryAssignments = async(projectId, categoryIds) => {
     }
 }
 
+const addCategory = async (categoryName) => {
+  try {
+    const query = 'INSERT INTO public.categories (name) VALUES ($1) RETURNING *;';
+    const result = await db.query(query, [categoryName]);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error adding category:", error);
+    throw error;
+  }
+};
+
+const updateCategory = async (categoryId, categoryName) => {
+  try {
+    const query = 'UPDATE public.categories SET name = $1 WHERE category_id = $2 RETURNING *;';
+    const result = await db.query(query, [categoryName, categoryId]);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error updating category:", error);
+    throw error;
+  }
+};
+
 export { 
   getAllCategories,
   getCategoryById,
   getCategoriesByProject,
-  updateCategoryAssignments
+  updateCategoryAssignments,
+  addCategory,
+  updateCategory
 };

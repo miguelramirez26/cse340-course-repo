@@ -1,6 +1,17 @@
 // Import any needed model functions
-import { getAllCategories, getCategoryById, getCategoriesByProject, updateCategoryAssignments } from '../models/categories.js';
+import { body, validationResult } from 'express-validator';
+import { getAllCategories, getCategoryById, getCategoriesByProject, updateCategoryAssignments, addCategory, updateCategory } from '../models/categories.js';
 import { getProjectDetails } from '../models/projects.js';
+
+const categoryValidation = [
+  body('category_name')
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage('Please provide a category name.')
+    .isLength({ min: 3, max: 100 })
+    .withMessage('Category name must be between 3 and 100 characters.')
+];
 
 // Define controller functions
 const showCategoriesPage = async (req, res) => {
@@ -59,5 +70,71 @@ const processAssignCategoriesForm = async (req, res) => {
     res.redirect(`/project/${projectId}`);
 };
 
-// Export controller functions
-export { showCategoriesPage, getCategoryDetails, showAssignCategoriesForm, processAssignCategoriesForm };
+const showCreateCategoryForm = async (req, res) => {
+  res.render('new-category', {
+    title: 'Create New Category'
+  });
+};
+
+const processCreateCategory = async (req, res) => {
+  const results = validationResult(req);
+  if (!results.isEmpty()) {
+    results.array().forEach((error) => {
+      req.flash('error', error.msg);
+    });
+    return res.redirect('/new-category');
+  }
+
+  const { category_name } = req.body;
+  try {
+    await addCategory(category_name);
+    req.flash('success', 'Category added successfully!');
+    res.redirect('/categories');
+  } catch (error) {
+    req.flash('error', 'Sorry, creating the category failed.');
+    res.redirect('/new-category');
+  }
+};
+
+const showEditCategoryForm = async (req, res) => {
+  const categoryId = req.params.id;
+  const categoryRows = await getCategoryById(categoryId);
+  const category = categoryRows;
+
+  res.render('edit-category', {
+    title: 'Edit Category',
+    category: category
+  });
+};
+
+const processEditCategory = async (req, res) => {
+  const results = validationResult(req);
+  if (!results.isEmpty()) {
+    results.array().forEach((error) => {
+      req.flash('error', error.msg);
+    });
+    return res.redirect(`/edit-category/${req.body.category_id}`);
+  }
+
+  const { category_id, category_name } = req.body;
+  try {
+    await updateCategory(category_id, category_name);
+    req.flash('success', 'Category updated successfully!');
+    res.redirect('/categories');
+  } catch (error) {
+    req.flash('error', 'Sorry, the update failed.');
+    res.redirect(`/edit-category/${category_id}`);
+  }
+};
+
+export { 
+  showCategoriesPage, 
+  getCategoryDetails, 
+  showAssignCategoriesForm, 
+  processAssignCategoriesForm,
+  showCreateCategoryForm,
+  processCreateCategory,
+  showEditCategoryForm,
+  processEditCategory,
+  categoryValidation
+};
