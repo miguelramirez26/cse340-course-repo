@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS project (
     date DATE NOT NULL,
     CONSTRAINT fk_organization 
         FOREIGN KEY (organization_id) 
-        REFERENCES organization(organization_id) 
+        REFERENCES organizations(organization_id) 
         ON DELETE CASCADE
 );
 
@@ -65,4 +65,4 @@ INSERT INTO public.categories (name) VALUES
 INSERT INTO public.project_category (project_id, category_id) VALUES
 (1, 3), (2, 1), (3, 2), (4, 2), (5, 1), 
 (6, 1), (7, 1), (8, 1), (9, 1), (10, 3), 
-(11, 2), (12, 3), (13, 1), (14, 2), (15; 3);
+(11, 2), (12, 3), (13, 1), (14, 2), (15, 3);
