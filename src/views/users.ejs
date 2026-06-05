@@ -1,0 +1,33 @@
+<%- include('partials/header') %>
+
+<main class="users-admin-page">
+    <h1><%= title %></h1>
+    <p class="section-description">Below is the complete list of registered users and their security clearance roles within the system.</p>
+
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Email (Username)</th>
+                <th>System Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (locals.users && users.length > 0) { %>
+                <% users.forEach(user => { %>
+                    <tr>
+                        <td><%= user.name %></td>
+                        <td><%= user.email %></td>
+                        <td><%= user.role_name %></td>
+                    </tr>
+                <% }) %>
+            <% } else { %>
+                <tr>
+                    <td colspan="3" class="no-data-message">No registered users found or data stream is empty.</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</main>
+
+<%- include('partials/footer') %>

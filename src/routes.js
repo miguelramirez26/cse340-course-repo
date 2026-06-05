@@ -5,7 +5,7 @@ import { showOrganizationsPage, showOrganizationDetailsPage, showNewOrganization
 import { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation, showEditProjectForm, processEditProjectForm } from './controllers/projects.js';
 import { showCategoriesPage, getCategoryDetails, showAssignCategoriesForm, processAssignCategoriesForm, showCreateCategoryForm, processCreateCategory, showEditCategoryForm, processEditCategory, categoryValidation } from './controllers/categories.js';
 import { triggerTestError } from './controllers/errors.js';
-import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard, requireRole } from './controllers/users.js';
+import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard, requireRole, showUsersPage } from './controllers/users.js';
 
 const router = express.Router();
 
@@ -65,5 +65,8 @@ router.get('/logout', processLogout);
 
 // Protected dahsboard route
 router.get('/dashboard', requireLogin, showDashboard);
+
+// Administrative route to manage registered system users
+router.get('/users', requireRole('admin'), showUsersPage);
 
 export default router;

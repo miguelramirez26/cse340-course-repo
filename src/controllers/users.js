@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { createUser, authenticateUser } from '../models/users.js';
+import { createUser, authenticateUser, getAllUsers } from '../models/users.js';
 import { error } from 'console';
 
 const showUserRegistrationForm = (req, res) => {
@@ -84,6 +84,7 @@ const showDashboard = (req, res) => {
         title: 'Dashboard',
         name: user.name,
         email: user.email,
+        role: user.role_name
     });
 };
 
@@ -103,4 +104,19 @@ const requireRole = (role) => {
     };
 };
 
-export { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard, requireRole };
+const showUsersPage = async (req, res) => {
+    try {
+        const usersList = await getAllUsers();
+        
+        res.render('users', { 
+            title: 'User Management', 
+            users: usersList 
+        });
+    } catch (error) {
+        console.error('Error fetching system users:', error);
+        req.flash('error', 'Critical Server Error: Unable to retrieve the user directory.');
+        res.redirect('/dashboard');
+    }
+};
+
+export { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard, requireRole, showUsersPage };

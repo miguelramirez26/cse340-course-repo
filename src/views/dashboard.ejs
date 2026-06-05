@@ -7,8 +7,8 @@
     <p>Name: <%= name %></p>
     <p>Username: <%= email %></p>
 
-    <% if (user.role_name == 'admin') { %>
-    <p><a href="/secret-route">Secret Route</a></p>
+    <% if (locals.role && role === 'admin') { %>
+        <p><a href="/users">Manage Users</a></p>
     <% } %>
 
 </main>

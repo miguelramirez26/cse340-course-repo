@@ -81,3 +81,64 @@ body {
     background-color: #d1ecf1;
     border-color: #bee5eb;
 }
+
+.users-admin-page {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.users-admin-page h1 {
+    color: #333333;
+    font-size: 2.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.section-description {
+    color: #666666;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.admin-table th {
+    background-color: #f4f6f8;
+    color: #4a5568;
+    text-align: left;
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.admin-table td {
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid #edf2f7;
+    color: #2d3748;
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+
+.admin-table tbody tr:nth-child(even) {
+    background-color: #fafbfc;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #f7fafc;
+}
+
+.no-data-message {
+    text-align: center;
+    color: #a0aec0;
+    font-style: italic;
+    padding: 3rem !important;
+}
