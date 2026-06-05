@@ -5,10 +5,10 @@
     <h2>Welcome to the CSE 340 Service Network!</h2>
     <p>Our mission is to promote service across the world by connecting volunteers...</p>
     <img class="main-logo" src="images/cse340-service-network.png" alt="CSE Logo">
+
+    <% if (isLoggedIn) { %>
+    <p><a href="/dashboard">My Dashboard</a></p>
+    <% } %>
 </main>
 
 <%- include('partials/footer') %>
-
-<% if (isLoggedIn) { %>
-    <p><a href="/dashboard">My Dashboard</a></p>
-<% } %>

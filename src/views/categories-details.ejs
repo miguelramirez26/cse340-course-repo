@@ -4,7 +4,9 @@
   <h1><%- categoryDetails.name %> Projects</h1>
 
   <div class="action-links">
-    <a href="/edit-category/<%= categoryDetails.category_id %>">Edit Category Name</a>
+    <% if (user && user.role_name === 'admin') { %>
+        <a href="/edit-category/<%= categoryDetails.category_id %>">Edit Category Name</a>
+    <% } %>
   </div>
 
   <% if (projects && projects.length > 0) { %>
