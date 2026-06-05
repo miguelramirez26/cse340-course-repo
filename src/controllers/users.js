@@ -97,7 +97,7 @@ const requireRole = (role) => {
         
         if (req.session.user.role_name !== role) {
             req.flash('error', 'You do not have permission to access this resource.');
-            return res.redirect('/');
+            return res.redirect('/dashboard');
         }
 
         next();
