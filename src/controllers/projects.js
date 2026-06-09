@@ -1,6 +1,6 @@
 // Import any needed model functions
 import { body, validationResult } from 'express-validator';
-import { getUpcomingProjects, getProjectDetails, createProject, updateProject } from '../models/projects.js';
+import { getUpcomingProjects, getProjectDetails, createProject, updateProject, addVolunteer, removeVolunteer, checkVolunteeringStatus } from '../models/projects.js';
 import { getCategoriesByProject } from '../models/categories.js';
 import { getAllOrganizations } from '../models/organizations.js';
 
@@ -60,10 +60,23 @@ const showProjectDetailsPage = async (req, res) => {
         // Call the model function to get categories for this project
         const categories = await getCategoriesByProject(projectId);
 
+        // Check volunteering status if user is logged in
+        let isVolunteering = false;
+        if (req.session && req.session.user) {
+            const userId = req.session.user.user_id || req.session.user.id;
+            isVolunteering = await checkVolunteeringStatus(userId, projectId);
+        }
+
         const title = project.title;
         
         // Render the service project details page view (project.ejs)
-        res.render('project', { title, project, categories });
+        res.render('project', { 
+            title, 
+            project, 
+            categories, 
+            user: req.session.user || null, 
+            isVolunteering 
+        });
     } catch (error) {
         console.error("Error in showProjectDetailsPage controller:", error);
         res.status(500).render('errors/500', { title: 'Server Error' });
@@ -136,5 +149,46 @@ const processEditProjectForm = async (req, res) => {
     }
 };
 
+/* ******************************************
+ *  VOLUNTEER PROCESSORS (W06 Assignment)
+ * ****************************************** */
+
+// Process adding a user as a volunteer
+const processAddVolunteer = async (req, res) => {
+    const projectId = req.params.id;
+    const userId = req.session.user.user_id || req.session.user.id;
+
+    try {
+        await addVolunteer(userId, projectId);
+        req.flash('success', 'You have successfully signed up as a volunteer for this project!');
+        res.redirect(`/project/${projectId}`);
+    } catch (error) {
+        console.error("Error in processAddVolunteer:", error);
+        req.flash('error', 'Could not sign up for volunteering at this moment.');
+        res.redirect(`/project/${projectId}`);
+    }
+};
+
+// Process removing a user from volunteering
+const processRemoveVolunteer = async (req, res) => {
+    const projectId = req.params.id;
+    const userId = req.session.user.user_id || req.session.user.id;
+
+    try {
+        await removeVolunteer(userId, projectId);
+        req.flash('success', 'Your volunteering registration has been removed.');
+        
+        const referer = req.get('Referrer') || '';
+        if (referer.includes('dashboard')) {
+            return res.redirect('/dashboard');
+        }
+        res.redirect(`/project/${projectId}`);
+    } catch (error) {
+        console.error("Error in processRemoveVolunteer:", error);
+        req.flash('error', 'Could not cancel volunteering registration.');
+        res.redirect(`/project/${projectId}`);
+    }
+};
+
 // Export controller functions
-export { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation, showEditProjectForm, processEditProjectForm };
+export { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation, showEditProjectForm, processEditProjectForm, processAddVolunteer, processRemoveVolunteer };

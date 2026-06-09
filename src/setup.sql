@@ -100,3 +100,21 @@ JOIN roles r ON u.role_id = r.role_id;
 
 -- Delete the test user
 DELETE FROM users WHERE email = 'test@example.com';
+
+-- =========================================================
+-- VOLUNTEER JUNCTION TABLE (W06 Assignment)
+-- =========================================================
+CREATE TABLE IF NOT EXISTS public.project_volunteers (
+    user_id INT NOT NULL,
+    project_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, project_id),
+    CONSTRAINT fk_volunteer_user 
+        FOREIGN KEY (user_id) 
+        REFERENCES public.users(user_id) 
+        ON DELETE CASCADE,
+    CONSTRAINT fk_volunteer_project 
+        FOREIGN KEY (project_id) 
+        REFERENCES public.project(project_id) 
+        ON DELETE CASCADE
+);

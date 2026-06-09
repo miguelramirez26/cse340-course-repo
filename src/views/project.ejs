@@ -7,19 +7,47 @@
         <p><strong>Description:</strong> <%= project.description %></p>
         
         <% 
-            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
             const formattedDate = new Date(project.date).toLocaleDateString('en-US', dateOptions);
         %>
         <p><strong>Date:</strong> <%= formattedDate %></p>
         <p><strong>Location:</strong> <%= project.location %></p>
         
         <p><strong>Partner Organization:</strong> 
-            <!-- Link to the organization details page -->
             <a href="/organization/<%= project.organization_id %>">
                 <%= project.organization_name %>
             </a>
         </p>
     </div>
+    
+    <!-- =========================================================
+         VOLUNTEER SECTION (W06 Assignment)
+         ========================================================= -->
+    <div class="volunteer-actions-zone">
+        <% if (locals.user) { %>
+            <% if (locals.isVolunteering) { %>
+                <p class="volunteer-success-msg">
+                    ✓ You are volunteering for this project!
+                </p>
+                <form action="/project/volunteer/remove/<%= project.project_id %>" method="POST">
+                    <button type="submit" class="btn btn-volunteer-remove">
+                        Leave Project / Cancel Volunteering
+                    </button>
+                </form>
+            <% } else { %>
+                <p style="margin-bottom: 10px;">Would you like to support this initiative?</p>
+                <form action="/project/volunteer/add/<%= project.project_id %>" method="POST">
+                    <button type="submit" class="btn btn-volunteer-add">
+                        Volunteer for this Project
+                    </button>
+                </form>
+            <% } %>
+        <% } else { %>
+            <p><em>Please <a href="/login">log in</a> to sign up as a volunteer for this service project.</em></p>
+        <% } %>
+    </div>
+    <!-- ========================================================= -->
+
     <div class="project-categories">
         <h3>Categories:</h3>
         <% if (categories && categories.length > 0) { %>
@@ -34,7 +62,8 @@
             <p>No categories assigned to this project.</p>
         <% } %>
     </div>
-    <% if (user && user.role_name === 'admin') { %>
+    
+    <% if (locals.user && user.role_name === 'admin') { %>
         <p><a href="/assign-categories/<%= project.project_id %>" class="btn">Edit Categories</a></p>
         <p><a href="/edit-project/<%= project.project_id %>" class="btn">Edit Project Details</a></p>
     <% } %>

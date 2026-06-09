@@ -2,7 +2,7 @@ import express from 'express';
 
 import { showHomePage } from './controllers/index.js';
 import { showOrganizationsPage, showOrganizationDetailsPage, showNewOrganizationForm, processNewOrganizationForm, organizationValidation, showEditOrganizationForm, processEditOrganizationForm } from './controllers/organizations.js';
-import { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation, showEditProjectForm, processEditProjectForm } from './controllers/projects.js';
+import { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation, showEditProjectForm, processEditProjectForm, processAddVolunteer, processRemoveVolunteer } from './controllers/projects.js';
 import { showCategoriesPage, getCategoryDetails, showAssignCategoriesForm, processAssignCategoriesForm, showCreateCategoryForm, processCreateCategory, showEditCategoryForm, processEditCategory, categoryValidation } from './controllers/categories.js';
 import { triggerTestError } from './controllers/errors.js';
 import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard, requireRole, showUsersPage } from './controllers/users.js';
@@ -68,5 +68,11 @@ router.get('/dashboard', requireLogin, showDashboard);
 
 // Administrative route to manage registered system users
 router.get('/users', requireRole('admin'), showUsersPage);
+
+// =========================================================
+// VOLUNTEER ROUTES (W06 Assignment)
+// =========================================================
+router.post('/project/volunteer/add/:id', requireLogin, processAddVolunteer);
+router.post('/project/volunteer/remove/:id', requireLogin, processRemoveVolunteer);
 
 export default router;

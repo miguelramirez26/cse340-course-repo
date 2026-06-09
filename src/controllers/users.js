@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { createUser, authenticateUser, getAllUsers } from '../models/users.js';
+import { getProjectsByVolunteer } from '../models/projects.js';
 import { error } from 'console';
 
 const showUserRegistrationForm = (req, res) => {
@@ -78,14 +79,29 @@ const requireLogin = (req, res, next) => {
     next();
 };
 
-const showDashboard = (req, res) => {
-    const user = req.session.user;
-    res.render('dashboard', {
-        title: 'Dashboard',
-        name: user.name,
-        email: user.email,
-        role: user.role_name
-    });
+/* ******************************************
+ *  SHOW USER DASHBOARD (W06 Assignment)
+ * ****************************************** */
+const showDashboard = async (req, res) => {
+    try {
+        const user = req.session.user;
+        const userId = user.user_id || user.id;
+
+        // Recuperar los proyectos donde el usuario es voluntario
+        const volunteeredProjects = await getProjectsByVolunteer(userId);
+
+        res.render('dashboard', {
+            title: 'Dashboard',
+            name: user.name,
+            email: user.email,
+            role: user.role_name,
+            volunteeredProjects 
+        });
+    } catch (error) {
+        console.error("Error in showDashboard controller:", error);
+        req.flash('error', 'There was an error loading your dashboard items.');
+        res.status(500).render('errors/500', { title: 'Server Error' });
+    }
 };
 
 const requireRole = (role) => {

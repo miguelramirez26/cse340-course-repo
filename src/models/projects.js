@@ -122,6 +122,65 @@ const updateProject = async (projectId, title, description, location, date, orga
     return result.rows[0].project_id;
 };
 
+/* ******************************************
+ *  VOLUNTEER MODEL FUNCTIONS (W06 Assignment)
+ * ****************************************** */
+
+// Add a user as a volunteer for a project
+const addVolunteer = async (userId, projectId) => {
+  try {
+    const query = "INSERT INTO public.project_volunteers (user_id, project_id) VALUES ($1, $2) RETURNING *";
+    const result = await db.query(query, [userId, projectId]);
+    return result.rows;
+  } catch (error) {
+    console.error("Error in addVolunteer:", error);
+    throw error;
+  }
+};
+
+// Remove a user as a volunteer from a project
+const removeVolunteer = async (userId, projectId) => {
+  try {
+    const query = "DELETE FROM public.project_volunteers WHERE user_id = $1 AND project_id = $2 RETURNING *";
+    const result = await db.query(query, [userId, projectId]);
+    return result.rows;
+  } catch (error) {
+    console.error("Error in removeVolunteer:", error);
+    throw error;
+  }
+};
+
+// Get all projects a specific user has volunteered for
+const getProjectsByVolunteer = async (userId) => {
+  try {
+    const query = `
+      SELECT p.*, o.name AS organization_name
+      FROM public.project p
+      JOIN public.project_volunteers pv ON p.project_id = pv.project_id
+      JOIN public.organizations o ON p.organization_id = o.organization_id
+      WHERE pv.user_id = $1
+      ORDER BY p.date ASC;
+    `;
+    const result = await db.query(query, [userId]);
+    return result.rows;
+  } catch (error) {
+    console.error("Error in getProjectsByVolunteer:", error);
+    throw error;
+  }
+};
+
+// Check if a user is already volunteering for a specific project
+const checkVolunteeringStatus = async (userId, projectId) => {
+  try {
+    const query = "SELECT * FROM public.project_volunteers WHERE user_id = $1 AND project_id = $2";
+    const result = await db.query(query, [userId, projectId]);
+    return result.rows.length > 0;
+  } catch (error) {
+    console.error("Error in checkVolunteeringStatus:", error);
+    throw error;
+  }
+};
+
 // Export all functions
 export { 
     getAllProjects, 
@@ -130,5 +189,9 @@ export {
     getProjectDetails,
     getProjectsByCategory,
     createProject,
-    updateProject
+    updateProject,
+    addVolunteer,
+    removeVolunteer,
+    getProjectsByVolunteer,
+    checkVolunteeringStatus
 };

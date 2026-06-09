@@ -11,6 +11,59 @@
         <p><a href="/users">Manage Users</a></p>
     <% } %>
 
+    <!-- =========================================================
+         VOLUNTEERED PROJECTS LIST (W06 Assignment)
+         ========================================================= -->
+    <section class="my-volunteering-section">
+        <h3>My Volunteering Service Projects</h3>
+        
+        <% if (locals.volunteeredProjects && volunteeredProjects.length > 0) { %>
+            <div class="volunteered-list-container">
+                <table class="volunteered-table">
+                    <thead>
+                        <tr>
+                            <th>Project Title</th>
+                            <th>Organization</th>
+                            <th>Date</th>
+                            <th style="text-align: center;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% volunteeredProjects.forEach(project => { %>
+                            <tr>
+                                <td>
+                                    <a href="/project/<%= project.project_id %>" class="project-link">
+                                        <%= project.title %>
+                                    </a>
+                                </td>
+                                <td><%= project.organization_name %></td>
+                                <td>
+                                    <% 
+                                        const dateOptions = { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' };
+                                        const formattedDate = new Date(project.date).toLocaleDateString('en-US', dateOptions);
+                                    %>
+                                    <%= formattedDate %>
+                                </td>
+                                <td style="text-align: center;">
+                                    <form action="/project/volunteer/remove/<%= project.project_id %>" method="POST" style="margin: 0;">
+                                        <button type="submit" class="btn-volunteer-remove-sm">
+                                            Remove
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        <% } else { %>
+            <p style="color: #666; font-style: italic; margin-top: 15px;">
+                You haven't signed up for any service projects yet. Check out the <a href="/projects">upcoming projects</a>!
+            </p>
+        <% } %>
+    </section>
+    <!-- ========================================================= -->
+
 </main>
 
 <%- include('partials/footer') %>
